@@ -33,3 +33,13 @@ output "resource-ids" {
 
   sensitive = true
 }
+output "ksqldb-api-key" {
+  value = confluent_api_key.app-ksqldb-api-key.id
+}
+output "ksqldb-api-secret" {
+  value = confluent_api_key.app-ksqldb-api-key.secret
+  sensitive =  true
+}
+output "ksqldb-endpoint" {
+  value = confluent_ksql_cluster.main.rest_endpoint
+}
