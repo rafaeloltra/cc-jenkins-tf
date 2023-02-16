@@ -2,7 +2,7 @@
 ksqldb_key=$(/usr/bin/terraform output -raw ksqldb-api-key)
 ksqldb_secret=$(/usr/bin/terraform output -raw ksqldb-api-secret)
 ksqldb_endpoint=$(/usr/bin/terraform output -raw ksqldb-endpoint)
-ksqldb_sql_file="/host/create-users-stream.sql"
+ksqldb_sql_file="create-users-stream.sql"
 
 echo running ksqldb-cli
 
