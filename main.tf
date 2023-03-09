@@ -16,14 +16,14 @@ resource "confluent_environment" "staging" {
   display_name = "RafaDEMO-TF"
 }
 
-data "confluent_schema_registry_region" "essentials" {
+data "confluent_schema_registry_region" "advanced" {
   cloud   = "AWS"
   region  = "us-east-2"
-  package = "ESSENTIALS"
+  package = "ADVANCED"
 }
 
-resource "confluent_schema_registry_cluster" "essentials" {
-  package = data.confluent_schema_registry_region.essentials.package
+resource "confluent_schema_registry_cluster" "advanced" {
+  package = data.confluent_schema_registry_region.advanced.package
 
   environment {
     id = confluent_environment.staging.id
