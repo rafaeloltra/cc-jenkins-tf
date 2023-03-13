@@ -16,14 +16,14 @@ resource "confluent_environment" "staging" {
   display_name = "RafaDEMO-TF"
 }
 
-data "confluent_schema_registry_region" "advanced" {
+data "confluent_schema_registry_region" "essentials" {
   cloud   = "AWS"
   region  = "us-east-2"
-  package = "ADVANCED"
+  package = "ESSENTIALS"
 }
 
-resource "confluent_schema_registry_cluster" "advanced" {
-  package = data.confluent_schema_registry_region.advanced.package
+resource "confluent_schema_registry_cluster" "essentials" {
+  package = data.confluent_schema_registry_region.essentials.package
 
   environment {
     id = confluent_environment.staging.id
@@ -33,7 +33,7 @@ resource "confluent_schema_registry_cluster" "advanced" {
     # See https://docs.confluent.io/cloud/current/stream-governance/packages.html#stream-governance-regions
     # Stream Governance and Kafka clusters can be in different regions as well as different cloud providers,
     # but you should to place both in the same cloud and region to restrict the fault isolation boundary.
-    id = data.confluent_schema_registry_region.advanced.id
+    id = data.confluent_schema_registry_region.essentials.id
   }
 }
 
@@ -120,7 +120,7 @@ resource "confluent_role_binding" "app-ksql-kafka-cluster-admin" {
 resource "confluent_role_binding" "app-ksql-schema-registry-resource-owner" {
   principal   = "User:${confluent_service_account.app-ksql.id}"
   role_name   = "ResourceOwner"
-  crn_pattern = format("%s/%s", confluent_schema_registry_cluster.advanced.resource_name, "subject=*")
+  crn_pattern = format("%s/%s", confluent_schema_registry_cluster.essentials.resource_name, "subject=*")
 }
 
 resource "confluent_ksql_cluster" "main" {
@@ -138,7 +138,7 @@ resource "confluent_ksql_cluster" "main" {
   depends_on = [
     confluent_role_binding.app-ksql-kafka-cluster-admin,
     confluent_role_binding.app-ksql-schema-registry-resource-owner,
-    confluent_schema_registry_cluster.advanced
+    confluent_schema_registry_cluster.essentials
   ]
 }
 
